@@ -43,8 +43,14 @@ namespace StudentEnrollmentAPI
                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
            });
 
+<<<<<<< HEAD
             // register my Dependancy Injection services
             services.AddTransient<IStudent, StudentRepository>();
+=======
+            // register my Dependency Injection Services
+            services.AddTransient<IStudent, StudentRepository>();
+
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

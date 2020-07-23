@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using StudentEnrollmentAPI.Data;
 using StudentEnrollmentAPI.Models;
 using StudentEnrollmentAPI.Models.Interfaces;
@@ -27,8 +28,12 @@ namespace StudentEnrollmentAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
+<<<<<<< HEAD
             List<Student> students = await _student.GetStudents();
             return students;
+=======
+            return await _student.GetStudents();
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
         }
 
         // GET: api/Students/5
@@ -49,9 +54,13 @@ namespace StudentEnrollmentAPI.Controllers
             {
                 return BadRequest();
             }
-
             var updatedStudent = await _student.Update(student);
 
+<<<<<<< HEAD
+            var updatedStudent = await _student.Update(student);
+
+=======
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
             return Ok(updatedStudent);
         }
 
@@ -62,7 +71,10 @@ namespace StudentEnrollmentAPI.Controllers
         public async Task<ActionResult<Student>> PostStudent(Student student)
         {
             await _student.Create(student);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
             return CreatedAtAction("GetStudent", new { id = student.Id }, student);
         }
 
@@ -71,10 +83,15 @@ namespace StudentEnrollmentAPI.Controllers
         public async Task<ActionResult> DeleteStudent(int id)
         {
             await _student.Delete(id);
+<<<<<<< HEAD
 
             return NoContent();
 
         }
 
+=======
+            return NoContent();
+        }
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
     }
 }

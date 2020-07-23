@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
 using SQLitePCL;
+=======
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
 using StudentEnrollmentAPI.Data;
 using StudentEnrollmentAPI.Models.Interfaces;
 using System;
@@ -11,14 +14,20 @@ namespace StudentEnrollmentAPI.Models.Services
 {
     public class StudentRepository : IStudent
     {
+<<<<<<< HEAD
 
         private SchoolEnrollmentDbContext _context;
 
         // This is the INJECTION: It is from the DBContext file.
+=======
+        private SchoolEnrollmentDbContext _context;
+
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
         public StudentRepository(SchoolEnrollmentDbContext context)
         {
             _context = context;
         }
+<<<<<<< HEAD
 
         public async Task<Student> Create(Student student) // for async you need it to return a Task<T> return time
         {
@@ -37,6 +46,26 @@ namespace StudentEnrollmentAPI.Models.Services
             Student student = await GetStudent(id);
             _context.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Deleted; // staged for deletion
             await _context.SaveChangesAsync();
+=======
+        public async Task<Student> Create(Student student)
+        {
+            // when i have a student, i want to add them to the database. 
+            _context.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            // the student gets 'saved' here, and then associated with an id.
+            await _context.SaveChangesAsync();
+
+            return student;
+
+        }
+
+        public async Task Delete(int id)
+        {
+            Student student = await GetStudent(id);
+
+            _context.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            await _context.SaveChangesAsync();
+
+>>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
         }
 
         public async Task<Student> GetStudent(int id)
