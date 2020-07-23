@@ -32,7 +32,11 @@ namespace StudentEnrollmentAPI
         {
             // this is where all of our dependencies are going to live. 
             // Enable the use of using controllers within the MVC convention
-            services.AddControllers();
+            // Install - Package Microsoft.AspNetCore.Mvc.NewtonsoftJson - Version 3.1.2
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+
 
             // Register with the app, that the database exists, and what options to use for it. 
             services.AddDbContext<SchoolEnrollmentDbContext>(options =>
@@ -49,6 +53,8 @@ namespace StudentEnrollmentAPI
 =======
             // register my Dependency Injection Services
             services.AddTransient<IStudent, StudentRepository>();
+            services.AddTransient<ICourse, CourseRepository>();
+
 
 >>>>>>> 3b12b97f7570b6e082f7f765d9c30e1eb47e02d0
         }
