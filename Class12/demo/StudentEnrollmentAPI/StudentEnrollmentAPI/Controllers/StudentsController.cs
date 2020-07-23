@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentEnrollmentAPI.Data;
 using StudentEnrollmentAPI.Models;
+using StudentEnrollmentAPI.Models.Interfaces;
 
 namespace StudentEnrollmentAPI.Controllers
 {
@@ -14,32 +15,27 @@ namespace StudentEnrollmentAPI.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly SchoolEnrollmentDbContext _context;
+        private readonly IStudent _student;
 
         // our constructor is bringing in a reference to our db
-        public StudentsController(SchoolEnrollmentDbContext context)
+        public StudentsController(IStudent student)
         {
-            _context = context;
+            _student = student;
         }
 
         // GET: api/Students
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            return await _context.Students.ToListAsync();
+            List<Student> students = await _student.GetStudents();
+            return students;
         }
 
         // GET: api/Students/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> GetStudent(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-
-            if (student == null)
-            {
-                return NotFound();
-            }
-
+            Student student = await _student.GetStudent(id);
             return student;
         }
 
@@ -49,30 +45,14 @@ namespace StudentEnrollmentAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStudent(int id, Student student)
         {
-            if (id != student.Id)
+            if(id != student.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(student).State = EntityState.Modified;
+            var updatedStudent = await _student.Update(student);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(updatedStudent);
         }
 
         // POST: api/Students
@@ -81,31 +61,20 @@ namespace StudentEnrollmentAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Student>> PostStudent(Student student)
         {
-            _context.Students.Add(student);
-            await _context.SaveChangesAsync();
+            await _student.Create(student);
 
             return CreatedAtAction("GetStudent", new { id = student.Id }, student);
         }
 
         // DELETE: api/Students/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Student>> DeleteStudent(int id)
+        public async Task<ActionResult> DeleteStudent(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            if (student == null)
-            {
-                return NotFound();
-            }
+            await _student.Delete(id);
 
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
+            return NoContent();
 
-            return student;
         }
 
-        private bool StudentExists(int id)
-        {
-            return _context.Students.Any(e => e.Id == id);
-        }
     }
 }
